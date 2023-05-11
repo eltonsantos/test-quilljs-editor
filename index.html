@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Quilljs Editor com efeito fade in/out na toolbar</title>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <style>
+      .ql-toolbar {
+        display: none;
+      }
+
+      #editor-container {
+        width: 760px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="width: 760px; margin: 0 auto; margin-top: 20vh;">
+      <div id="editor-container" style="border: 1px solid #000;"></div>
+      <button id="save-btn">Salvar</button>
+    </div>
+  
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script>
+      var container = document.querySelector("#editor-container");
+  
+      var toolbarOptions = [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'font': [] }],
+        ['bold', 'italic', 'underline'],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
+        ['link', 'image', 'video'],
+        ['formula', 'code-block'],
+        ['clean'] 
+      ]
+  
+      var quill = new Quill(container, {
+        modules: {
+          toolbar: toolbarOptions
+        },
+        theme: "snow",
+      });
+  
+      var input = document.querySelector(".ql-editor");
+      var toolbar = document.querySelector(".ql-toolbar");
+      var saveBtn = document.querySelector("#save-btn");
+  
+      // Carregar conteúdo salvo do LocalStorage
+      var savedContent = window.localStorage.getItem("editorContent");
+      if (savedContent) {
+        quill.root.innerHTML = savedContent;
+      }
+  
+      saveBtn.addEventListener("click", function() {
+        // Obter o conteúdo do editor
+        var content = quill.root.innerHTML;
+        // Salvar o conteúdo em LocalStorage
+        window.localStorage.setItem("editorContent", content);
+      });
+  
+      input.addEventListener("click", function () {
+        toolbar.style.display = "block";
+      });
+  
+      input.addEventListener("blur", function () {
+        setTimeout(function () {
+          if (!toolbar.contains(document.activeElement)) {
+            toolbar.style.display = "none";
+          }
+        }, 0);
+      });
+  
+      document.addEventListener("mousedown", function (event) {
+        if (!toolbar.contains(event.target) && !input.contains(event.target)) {
+          toolbar.style.display = "none";
+        }
+      });
+    </script>
+  </body>
+</html>
