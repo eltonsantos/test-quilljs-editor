@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8" />
-    <title>Quilljs Editor com efeito fade in/out na toolbar</title>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+    <title>Quill Editor Custom Field</title>
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
     <style>
-      .ql-toolbar {
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-      }
-
-      .ql-toolbar.show {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      #editor-container {
-        width: 760px;
-        height: 100px;
-      }
-
       .incident-modal-container {
         position: relative;
       }
@@ -56,9 +43,8 @@
     </style>
   </head>
   <body>
-    <div style="width: 760px; margin: 0 auto; margin-top: 20vh;">
-      <div id="editor-container" style="border: 1px solid #000;"></div>
-      <button id="save-btn">Salvar</button>
+    <div id="editor">
+      <p>Texto de exemplo [Unit]</p>
     </div>
 
     <!-- Modal -->
@@ -73,14 +59,11 @@
       </select>
       <button id="incident-ok">OK</button>
     </div>
-  
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-    <script>
-      var container = document.querySelector("#editor-container");
 
+    <script>
       var Delta = Quill.import("delta");
       var Parchment = Quill.import("parchment");
-  
+
       var icons = Quill.import("ui/icons");
       icons["incident"] = '<i class="fas fa-info-circle" title="Insert incident type"></i>';
 
@@ -92,61 +75,22 @@
       Quill.register(IncidentClass, true);
 
       var toolbarOptions = [
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
-        ['bold', 'italic', 'underline'],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': [] }],
-        ['link', 'image', 'video'],
-        ['formula', 'code-block'],
-        ['clean'],
         [{ incident: "incident" }],
-      ]
-  
-      var quill = new Quill(container, {
+        ["bold", "italic", "underline"],
+        ["link"],
+      ];
+
+      var quill = new Quill("#editor", {
         theme: "snow",
         modules: {
-          toolbar: toolbarOptions
+          toolbar: toolbarOptions,
         },
-      });
-  
-      var input = document.querySelector(".ql-editor");
-      var toolbar = document.querySelector(".ql-toolbar");
-      var saveBtn = document.querySelector("#save-btn");
-  
-      // Carregar conteúdo salvo do LocalStorage
-      var savedContent = window.localStorage.getItem("editorContent");
-      if (savedContent) {
-        quill.root.innerHTML = savedContent;
-      }
-  
-      saveBtn.addEventListener("click", function() {
-        // Obter o conteúdo do editor
-        var content = quill.root.innerHTML;
-        // Salvar o conteúdo em LocalStorage
-        window.localStorage.setItem("editorContent", content);
-      });
-  
-      input.addEventListener("click", function () {
-        toolbar.classList.add("show");
-      });
-  
-      input.addEventListener("blur", function () {
-        setTimeout(function () {
-          if (!toolbar.contains(document.activeElement)) {
-            toolbar.classList.remove("show");
-          }
-        }, 0);
-      });
-  
-      document.addEventListener("mousedown", function (event) {
-        if (!toolbar.contains(event.target) && !input.contains(event.target)) {
-          toolbar.classList.remove("show");
-        }
       });
 
       quill.getModule("toolbar").addHandler("incident", function () {
         var incidentModal = document.getElementById("incident-modal");
-        incidentModal.classList.add("show");
+        // incidentModal.style.display = "block"; // Abrir o modal
+        incidentModal.classList.add("show"); 
       });
 
       document.getElementById("incident-ok").addEventListener("click", function () {
@@ -162,9 +106,9 @@
           quill.setSelection(range.index);
         }
         var incidentModal = document.getElementById("incident-modal");
+        // incidentModal.style.display = "none"; // Fechar o modal
         incidentModal.classList.remove("show");
       });
     </script>
   </body>
 </html>
-
