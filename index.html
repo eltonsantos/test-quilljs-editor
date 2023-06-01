@@ -151,18 +151,47 @@
         incidentModal.classList.add("show");
       });
 
+      // WITHOUT LINK
+      // document.getElementById("incident-ok").addEventListener("click", function () {
+      //   var selectedOption = document.getElementById("incident-select").value;
+      //   var range = quill.getSelection();
+      //   if (range) {
+      //     var delta = new Delta()
+      //       .retain(range.index)
+      //       .delete(range.length)
+      //       .insert("[" + selectedOption + "]");
+      //     quill.updateContents(delta);      
+      //     quill.setSelection(range.index);
+      //   }
+      //   var incidentModal = document.getElementById("incident-modal");
+      //   incidentModal.classList.remove("show");
+      // });
+
+      // WITH LINK AND BREAK LINE
+      // document.getElementById("incident-ok").addEventListener("click", function () {
+      //   var selectedOption = document.getElementById("incident-select").value;
+      //   var linkText = "[" + selectedOption + "]";
+      //   var linkValue = "http://" + selectedOption.toLowerCase() + ".com";
+      //   var textarea = document.querySelector(".ql-editor");
+      //   textarea.innerHTML += `<a href="${linkValue}">${linkText}</a>`;
+      //   var incidentModal = document.getElementById("incident-modal");
+      //   incidentModal.classList.remove("show");
+      // });
+
+      // WITH LINK AND DOESNT BREAK LINE
       document.getElementById("incident-ok").addEventListener("click", function () {
         var selectedOption = document.getElementById("incident-select").value;
-        var range = quill.getSelection();
-        if (range) {
-          var delta = new Delta()
-            .retain(range.index)
-            .delete(range.length)
-            .insert("[" + selectedOption + "]");
-          quill.updateContents(delta);
-         
-          quill.setSelection(range.index);
-        }
+        var linkText = "[" + selectedOption + "]";
+        var linkValue = "http://" + selectedOption.toLowerCase() + ".com";
+        var textarea = document.querySelector(".ql-editor");
+        var linkElement = document.createElement("a");
+        linkElement.href = linkValue;
+        linkElement.innerText = linkText;
+        var spanElement = document.createElement("span");
+        spanElement.appendChild(linkElement);
+        var range = window.getSelection().getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(spanElement);
         var incidentModal = document.getElementById("incident-modal");
         incidentModal.classList.remove("show");
       });
