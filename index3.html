@@ -45,7 +45,6 @@
             language: 'pt-br'
          })
          .then(editor => {
-            // Adicionar o campo personalizado à toolbar
             editor.ui.componentFactory.add("customButton", locale => {
                const dropdown = document.createElement("select");
                dropdown.innerHTML = `
@@ -60,7 +59,6 @@
                button.setAttribute("class", "ck-button");
                button.innerHTML = 'Meu Botão';
 
-               // Ação personalizada ao clicar no botão
                button.addEventListener("click", () => {
                   const selectedValue = dropdown.value;
                   editor.model.change(writer => {
@@ -75,7 +73,6 @@
                return { button: container };
             });
 
-            // Renderizar a toolbar com o campo personalizado
             editor.ui.componentFactory.create("customButton").then(button => {
                editor.ui.view.toolbar.element.appendChild(button.button);
             });

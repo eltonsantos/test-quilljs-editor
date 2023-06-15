@@ -34,7 +34,7 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         margin-top: 10px;
-        opacity: 0; /* Inicialmente oculto */
+        opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
       }
@@ -63,7 +63,6 @@
       <button id="save-btn">Salvar</button>
     </div>
 
-    <!-- Modal -->
     <div id="incident-modal" class="incident-modal">
       <p>Select the [data] to be inserted:</p>
       <select id="incident-select">
@@ -115,16 +114,13 @@
       var toolbar = document.querySelector(".ql-toolbar");
       var saveBtn = document.querySelector("#save-btn");
   
-      // Carregar conteúdo salvo do LocalStorage
       var savedContent = window.localStorage.getItem("editorContent");
       if (savedContent) {
         quill.root.innerHTML = savedContent;
       }
   
       saveBtn.addEventListener("click", function() {
-        // Obter o conteúdo do editor
         var content = quill.root.innerHTML;
-        // Salvar o conteúdo em LocalStorage
         window.localStorage.setItem("editorContent", content);
       });
   
