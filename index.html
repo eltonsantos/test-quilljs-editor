@@ -84,6 +84,7 @@
   
       var icons = Quill.import("ui/icons");
       icons["incident"] = '<i class="fas fa-info-circle" title="Insert incident type"></i>';
+      icons["iplink"] = '<i class="fa fa-sharp fa-solid fa-globe" title="Create link"></i>';
 
       var IncidentClass = new Parchment.Attributor.Class("incident", "incident", {
         scope: Parchment.Scope.INLINE,
@@ -100,7 +101,7 @@
         ['link', 'image', 'video'],
         ['formula', 'code-block'],
         ['clean'],
-        [{ incident: "incident" }],
+        [{ incident: "incident" }, { iplink: "iplink" }],
       ]
   
       var quill = new Quill(container, {
