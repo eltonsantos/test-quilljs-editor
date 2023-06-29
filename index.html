@@ -85,13 +85,23 @@
       var icons = Quill.import("ui/icons");
       icons["incident"] = '<i class="fas fa-info-circle" title="Insert incident type"></i>';
       icons["iplink"] = '<i class="fa fa-sharp fa-solid fa-globe" title="Create link"></i>';
+      icons["iphtml"] = '<i class="fa fa-sharp fa-solid fa-file-code" title="Toggle HTML"></i>';
 
       var IncidentClass = new Parchment.Attributor.Class("incident", "incident", {
         scope: Parchment.Scope.INLINE,
         whitelist: ["Unit", "Description", "Type", "Category", "Date"],
       });
-
       Quill.register(IncidentClass, true);
+
+      var IpLinkClass = new Parchment.Attributor.Class("iplink", "iplink", {
+        scope: Parchment.Scope.INLINE,
+      });
+      Quill.register(IpLinkClass, true);
+
+      var IpHTMLClass = new Parchment.Attributor.Class("iphtml", "iphtml", {
+        scope: Parchment.Scope.INLINE,
+      });
+      Quill.register(IpHTMLClass, true);
 
       var toolbarOptions = [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -101,7 +111,7 @@
         ['link', 'image', 'video'],
         ['formula', 'code-block'],
         ['clean'],
-        [{ incident: "incident" }, { iplink: "iplink" }],
+        [{ incident: "incident" }, { iplink: "iplink" }, { iphtml: "iphtml"}],
       ]
   
       var quill = new Quill(container, {
@@ -146,6 +156,21 @@
       quill.getModule("toolbar").addHandler("incident", function () {
         var incidentModal = document.getElementById("incident-modal");
         incidentModal.classList.add("show");
+      });
+
+      quill.getModule("toolbar").addHandler("iphtml", function () {
+        var content = quill.root.innerHTML;
+        var isSourceMode = quill.root.dataset.sourceMode === "true";
+
+        if (isSourceMode) {
+          var tempElement = document.createElement("div");
+          tempElement.innerHTML = content;
+          quill.root.innerHTML = tempElement.textContent;
+          quill.root.dataset.sourceMode = "false";
+        } else {
+          quill.root.textContent = content;
+          quill.root.dataset.sourceMode = "true";
+        }
       });
 
       // WITHOUT LINK
