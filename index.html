@@ -84,6 +84,7 @@
   
       var icons = Quill.import("ui/icons");
       icons["incident"] = '<i class="fas fa-info-circle" title="Insert incident type"></i>';
+      // IpLink I will go to implement later
       icons["iplink"] = '<i class="fa fa-sharp fa-solid fa-globe" title="Create link"></i>';
       icons["iphtml"] = '<i class="fa fa-sharp fa-solid fa-file-code" title="Toggle HTML"></i>';
 
@@ -173,6 +174,24 @@
         }
       });
 
+      // WITH LINK AND DOESNT BREAK LINE
+      document.getElementById("incident-ok").addEventListener("click", function () {
+        var selectedOption = document.getElementById("incident-select").value;
+        var linkText = "[" + selectedOption + "]";
+        var linkValue = "http://" + selectedOption.toLowerCase() + ".com";
+        var textarea = document.querySelector(".ql-editor");
+        var linkElement = document.createElement("a");
+        linkElement.href = linkValue;
+        linkElement.innerText = linkText;
+        var spanElement = document.createElement("span");
+        spanElement.appendChild(linkElement);
+        var range = window.getSelection().getRangeAt(0);
+        range.deleteContents();
+        range.insertNode(spanElement);
+        var incidentModal = document.getElementById("incident-modal");
+        incidentModal.classList.remove("show");
+      });
+
       // WITHOUT LINK
       // document.getElementById("incident-ok").addEventListener("click", function () {
       //   var selectedOption = document.getElementById("incident-select").value;
@@ -199,25 +218,6 @@
       //   var incidentModal = document.getElementById("incident-modal");
       //   incidentModal.classList.remove("show");
       // });
-
-
-      // WITH LINK AND DOESNT BREAK LINE
-      document.getElementById("incident-ok").addEventListener("click", function () {
-        var selectedOption = document.getElementById("incident-select").value;
-        var linkText = "[" + selectedOption + "]";
-        var linkValue = "http://" + selectedOption.toLowerCase() + ".com";
-        var textarea = document.querySelector(".ql-editor");
-        var linkElement = document.createElement("a");
-        linkElement.href = linkValue;
-        linkElement.innerText = linkText;
-        var spanElement = document.createElement("span");
-        spanElement.appendChild(linkElement);
-        var range = window.getSelection().getRangeAt(0);
-        range.deleteContents();
-        range.insertNode(spanElement);
-        var incidentModal = document.getElementById("incident-modal");
-        incidentModal.classList.remove("show");
-      });
 
     </script>
   </body>
